@@ -86,7 +86,7 @@ This sample pairs with RevenueCat's iOS codelabs. Follow them to set up the dash
 All code lives in a local Swift package, `CatArticlesKit`, with a thin app target on top:
 
 <p align="center">
-<img src="arts/architecture.png" alt="Module dependency graph" width="520px"/>
+<img src="arts/architecture.png" alt="Module dependency graph" width="720px"/>
 </p>
 
 Arrows point from a module to its dependencies. `Feature*` modules pull in **RevenueCatUI** for the Paywalls and Account screens, while the core **RevenueCat** SDK stays isolated in `DataLayer`.
