@@ -4,7 +4,7 @@
   <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
   <img alt="Platform" src="https://img.shields.io/badge/iOS-17%2B-brightgreen.svg?style=flat"/>
   <img alt="Swift" src="https://img.shields.io/badge/Swift-5.9%2B-orange.svg?style=flat"/>
-  <a href="https://github.com/RevenueCat/cat-paywall-swiftui/actions/workflows/ios.yml"><img alt="Build" src="https://github.com/RevenueCat/cat-paywall-swiftui/actions/workflows/ios.yml/badge.svg"/></a>
+  <a href="https://github.com/RevenueCat/cat-paywall-swiftui/actions/workflows/build.yml"><img alt="Build" src="https://github.com/RevenueCat/cat-paywall-swiftui/actions/workflows/build.yml/badge.svg"/></a>
 </p>
 
 🐈 **Cat Paywall SwiftUI** is the native SwiftUI counterpart of [Cat Paywall Compose](https://github.com/RevenueCat/cat-paywall-compose) (Android) and [Cat Paywalls KMP](https://github.com/RevenueCat/cat-paywalls-kmp). It shows you how to build in-app subscriptions and a server-driven paywall for the App Store using [RevenueCat's iOS SDK (`purchases-ios`)](https://github.com/RevenueCat/purchases-ios) and SwiftUI.
