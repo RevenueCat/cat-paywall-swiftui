@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 import PackageDescription
 
 let package = Package(
@@ -16,8 +16,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/RevenueCat/purchases-ios.git", from: "5.78.0"),
-        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "8.0.0"),
+        .package(url: "https://github.com/RevenueCat/purchases-ios.git", from: "5.103.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "8.16.0"),
     ],
     targets: [
         // MARK: Core

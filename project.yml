@@ -7,7 +7,7 @@ options:
 
 settings:
   base:
-    SWIFT_VERSION: "5.0"
+    SWIFT_VERSION: "6.0"
     MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "1"
     GENERATE_INFOPLIST_FILE: "NO"
@@ -19,7 +19,7 @@ packages:
     path: CatArticlesKit
   RevenueCat:
     url: https://github.com/RevenueCat/purchases-ios.git
-    from: "5.78.0"
+    from: "5.103.0"
 
 targets:
   CatArticles:
