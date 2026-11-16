@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"/></a>
   <img alt="Platform" src="https://img.shields.io/badge/iOS-17%2B-brightgreen.svg?style=flat"/>
-  <img alt="Swift" src="https://img.shields.io/badge/Swift-5.9%2B-orange.svg?style=flat"/>
+  <img alt="Swift" src="https://img.shields.io/badge/Swift-6.0%2B-orange.svg?style=flat"/>
   <a href="https://github.com/RevenueCat/cat-paywall-swiftui/actions/workflows/build.yml"><img alt="Build" src="https://github.com/RevenueCat/cat-paywall-swiftui/actions/workflows/build.yml/badge.svg"/></a>
 </p>
 
@@ -51,7 +51,7 @@ This sample pairs with RevenueCat's iOS codelabs. Follow them to set up the dash
 ## 🛠 Tech Stack & Open Source Libraries
 
 - Minimum **iOS 17**, 100% [SwiftUI](https://developer.apple.com/xcode/swiftui/) + Swift Concurrency (`async/await`) + [Observation](https://developer.apple.com/documentation/observation) (`@Observable`).
-- [RevenueCat & RevenueCatUI](https://github.com/RevenueCat/purchases-ios) (`5.78.0`, via Swift Package Manager): in-app subscriptions, server-driven paywalls (`PaywallView`), and the Customer Center (`CustomerCenterView`).
+- [RevenueCat & RevenueCatUI](https://github.com/RevenueCat/purchases-ios) (`5.103.0`, via Swift Package Manager): in-app subscriptions, server-driven paywalls (`PaywallView`), and the Customer Center (`CustomerCenterView`).
 - [Kingfisher](https://github.com/onevcat/Kingfisher): asynchronous image loading and caching for article covers.
 - **Swift Package Manager**: a local `CatArticlesKit` package modularizes the app into `core` + `feature` targets (mirroring the Android/KMP module split).
 - `NavigationStack` for type-safe navigation, `URLSession` + `Codable` for networking, and `UserDefaults` for the reading tracker and bookmarks.
