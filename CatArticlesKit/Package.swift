@@ -43,7 +43,7 @@ let package = Package(
         .target(
             name: "FeatureHome",
             dependencies: [
-                "Model", "DataLayer", "DesignSystem", "AppNavigation",
+                "Model", "DataLayer", "DesignSystem", "AppNavigation", "FeaturePaywalls",
                 .product(name: "RevenueCat", package: "purchases-ios"),
             ]
         ),
@@ -79,7 +79,13 @@ let package = Package(
         ),
         .target(
             name: "FeatureBookmarks",
-            dependencies: ["Model", "DataLayer", "DesignSystem", "AppNavigation"]
+            dependencies: ["Model", "DataLayer", "DesignSystem", "AppNavigation", "FeaturePaywalls"]
+        ),
+
+        // MARK: Tests
+        .testTarget(
+            name: "CatArticlesKitTests",
+            dependencies: ["Model", "Networking", "DataLayer"]
         ),
     ]
 )

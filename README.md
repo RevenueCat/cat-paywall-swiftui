@@ -79,7 +79,35 @@ This sample pairs with RevenueCat's iOS codelabs. Follow them to set up the dash
 
 5. Open `CatArticles.xcodeproj` and run on a simulator or device.
 
+   The unit tests live in the `CatArticlesKit` package: `cd CatArticlesKit && xcodebuild test -scheme CatArticlesKit -destination 'platform=iOS Simulator,name=iPhone 17'`.
+
 > The article feed loads from a public gist, so the app runs without an API key; you'll just see "Free" status and no offering until a real key + a dashboard offering/paywall are configured. For the SDK details, see the [iOS Purchases & Paywalls codelab](https://revenuecat.github.io/codelabs/ios.html#0).
+
+## 💎 Premium-only Articles
+
+Some articles are reserved for subscribers. The flag comes from the article feed itself: the pinned gist revision marks three articles with `"premium": true`, and every other article omits the key, which decodes as `false` (see [`Article`](CatArticlesKit/Sources/Model/Article.swift)).
+
+One pure function, [`ArticleAccess.evaluate`](CatArticlesKit/Sources/DataLayer/ArticleAccess.swift), decides what tapping an article does, in this order:
+
+1. The `premium` entitlement is active: open the article.
+2. The article is premium: show the premium paywall. The daily quota of 3 free articles never gates premium articles.
+3. The daily free quota is spent: open the existing paywall screen.
+4. Otherwise: open the article.
+
+The home grid applies the full rule. Bookmarks only apply the premium part, so a lapsed subscriber tapping a bookmarked premium article gets the premium paywall, while bookmarks stay free of quota gating as before. Premium articles show a **Premium** pill, with a lock while the user is not subscribed.
+
+The premium paywall is the reusable `premiumPaywall(for:onUnlock:)` modifier in [`FeaturePaywalls`](CatArticlesKit/Sources/FeaturePaywalls/PremiumPaywall.swift), used by both Home and Bookmarks. It fetches the current offering through `PaywallsRepository` and presents it with RevenueCatUI's `presentPaywall(offering:)`. When a purchase or restore activates `premium`, the tapped article opens once the paywall is dismissed; closing it without buying keeps the user where they were. The rule and the feed decoding are unit tested in `CatArticlesKit/Tests`, and CI runs those tests on an iOS Simulator.
+
+## 🚪 Exit Offers
+
+An exit offer is a second paywall that RevenueCat shows when a user closes your paywall without purchasing, for example with a discount or a free trial. The premium paywall is presented with `presentPaywall(offering:)`, the presentation API that supports exit offers (a `PaywallView` you place in your own sheet does not). The SDK shows the exit offer by itself, so the app needs no extra code; a purchase made from the exit offer unlocks the article just like one made from the main paywall. The custom slide-to-unlock paywall screen embeds `PaywallView` directly, so exit offers do not apply there.
+
+To set one up in the RevenueCat dashboard:
+
+1. Create a second Offering for the exit offer and [give it its own paywall](https://www.revenuecat.com/docs/tools/paywalls/creating-paywalls).
+2. Open the main paywall (the one attached to your current Offering), go to its **Paywall settings**, and choose the new Offering as the **Exit offer**.
+
+See [Displaying Paywalls](https://www.revenuecat.com/docs/tools/paywalls/displaying-paywalls) for which presentation APIs support exit offers.
 
 ## 🏛️ Architecture
 
@@ -89,7 +117,7 @@ All code lives in a local Swift package, `CatArticlesKit`, with a thin app targe
 <img src="arts/architecture.png" alt="Module dependency graph" />
 </p>
 
-Arrows point from a module to its dependencies. `Feature*` modules pull in **RevenueCatUI** for the Paywalls and Account screens, while the core **RevenueCat** SDK stays isolated in `DataLayer`.
+Arrows point from a module to its dependencies. `Feature*` modules pull in **RevenueCatUI** for the Paywalls and Account screens (Home and Bookmarks reach it through `FeaturePaywalls`, which owns the premium paywall), while the core **RevenueCat** SDK stays isolated in `DataLayer`.
 
 State flows down via `@Observable` stores injected through the SwiftUI environment; events flow up to the view models, the same **unidirectional data flow** as the Compose/KMP samples. All RevenueCat calls are isolated in `DataLayer` behind a `PaywallsRepository` protocol.
 

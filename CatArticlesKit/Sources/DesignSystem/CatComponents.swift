@@ -64,6 +64,34 @@ public struct QuotaBanner: View {
     }
 }
 
+// MARK: - Premium badge
+
+/// "Premium" pill for premium articles, with a lock while the user is not entitled.
+/// Same dark translucent fill and white bold type as the card title banner, so it reads on photos.
+public struct PremiumBadge: View {
+    private let isLocked: Bool
+
+    public init(isLocked: Bool) {
+        self.isLocked = isLocked
+    }
+
+    public var body: some View {
+        HStack(spacing: 4) {
+            if isLocked {
+                Image(systemName: "lock.fill")
+            }
+            Text("Premium")
+        }
+        .font(.system(size: 11, weight: .bold))
+        .foregroundStyle(.white)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(Color.black.opacity(0.65), in: Capsule())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(isLocked ? "Premium, locked" : "Premium")
+    }
+}
+
 // MARK: - Article card
 
 /// Grid cell for an article. Mirrors the Android/KMP card: a full-bleed cover
@@ -72,11 +100,18 @@ public struct QuotaBanner: View {
 public struct ArticleCard: View {
     private let article: Article
     private let isBookmarked: Bool
+    private let isPremiumUnlocked: Bool
     private let onBookmark: (() -> Void)?
 
-    public init(article: Article, isBookmarked: Bool = false, onBookmark: (() -> Void)? = nil) {
+    public init(
+        article: Article,
+        isBookmarked: Bool = false,
+        isPremiumUnlocked: Bool = false,
+        onBookmark: (() -> Void)? = nil
+    ) {
         self.article = article
         self.isBookmarked = isBookmarked
+        self.isPremiumUnlocked = isPremiumUnlocked
         self.onBookmark = onBookmark
     }
 
@@ -97,6 +132,12 @@ public struct ArticleCard: View {
         }
         .frame(height: 300)
         .clipShape(RoundedCornerShape(radius: 6))
+        .overlay(alignment: .topLeading) {
+            if article.premium {
+                PremiumBadge(isLocked: !isPremiumUnlocked)
+                    .padding(10)
+            }
+        }
         .overlay(alignment: .topTrailing) {
             if let onBookmark {
                 Button(action: onBookmark) {

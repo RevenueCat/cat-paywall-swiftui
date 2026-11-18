@@ -3,6 +3,7 @@ import Model
 import DataLayer
 import DesignSystem
 import AppNavigation
+import FeaturePaywalls
 
 @MainActor
 @Observable
@@ -30,6 +31,7 @@ public struct HomeScreen: View {
     @Environment(ReadingTrackerStore.self) private var readingTracker
     @Environment(BookmarksStore.self) private var bookmarks
     @State private var model = HomeModel()
+    @State private var premiumArticle: Article?
 
     public init() {}
 
@@ -56,6 +58,7 @@ public struct HomeScreen: View {
                             ArticleCard(
                                 article: article,
                                 isBookmarked: bookmarks.isBookmarked(article.title),
+                                isPremiumUnlocked: entitlement.isPremium,
                                 onBookmark: { toggleBookmark(article) }
                             )
                         }
@@ -77,15 +80,18 @@ public struct HomeScreen: View {
             }
         }
         .task { await model.load() }
+        .premiumPaywall(for: $premiumArticle) { router.push(.article($0)) }
     }
 
-    /// Free users are blocked once the daily quota is spent (→ paywall).
     private func open(_ article: Article) {
-        let reachedLimit = readingTracker.todayReadCount >= CatConstants.freeArticlesPerDay
-        if entitlement.isPremium || !reachedLimit {
-            router.push(.article(article))
-        } else {
-            router.push(.paywalls)
+        switch ArticleAccess.evaluate(
+            article: article,
+            isEntitled: entitlement.isPremium,
+            todayReadCount: readingTracker.todayReadCount
+        ) {
+        case .open: router.push(.article(article))
+        case .premiumPaywall: premiumArticle = article
+        case .dailyLimitPaywall: router.push(.paywalls)
         }
     }
 
