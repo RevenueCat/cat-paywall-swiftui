@@ -31,3 +31,13 @@ jobs:
             -scheme CatArticles \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO
+
+      # iPhone 17 is installed for every iOS 26 runtime on the macos-26 image; OS=latest picks
+      # the runtime that matches the default Xcode's simulator SDK.
+      - name: Test CatArticlesKit
+        working-directory: CatArticlesKit
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -scheme CatArticlesKit \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest'
